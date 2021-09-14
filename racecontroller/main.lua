@@ -1,5 +1,6 @@
 RaceController = RaceController or {}
 RaceController.racers = {}
+RaceController.racerCount = 0
 RaceController.running = false
 dofile("./addons/racecontroller/utils.lua")
 
@@ -74,12 +75,13 @@ hooks.register("OnChat", "chatControl", function(clientID, message)
         if not cmd[2] or not ply then
             RaceController.msg(caller, "Player not found")
         elseif RaceController.racers[ply:getID()] then
-            RaceController.msg(caller, "Player '" .. ply:getName() .. "'already added")
+            RaceController.msg(caller, "Player " .. ply:getName() .. " already added")
         elseif not vehicles[ply:getCurrentVehicle()] then
-            RaceController.msg(caller, "WARNING: Player '" .. ply:getName() .. "' has nil vehicle!")
+            RaceController.msg(caller, "WARNING: Player " .. ply:getName() .. " has nil vehicle!")
         else
             RaceController.addRacer(ply:getID())
             RaceController.msg(caller, "Added player " .. ply:getName() .. " in vehicle " .. vehicles[ply:getCurrentVehicle()]:getData():getName())
+            RaceController.racerCount = RaceController.racerCount + 1
         end
     end
 
@@ -91,7 +93,8 @@ hooks.register("OnChat", "chatControl", function(clientID, message)
         else
             if RaceController.racers[ply:getID()] then
                 RaceController.removeRacer(ply:getID())
-                RaceController.msg(caller, "Removed player '" .. ply:getName() .. "'")
+                RaceController.msg(caller, "Removed player " .. ply:getName())
+                RaceController.racerCount = RaceController.racerCount - 1
             else
                 RaceController.msg(caller, "Player not added")
             end
@@ -191,6 +194,7 @@ hooks.register("OnChat", "chatControl", function(clientID, message)
     if cmd[1] == "/reset" then
         RaceController.running = false
         RaceController.racers = {}
+        RaceController.racerCount = 0
         RaceController.timers = {}
         RaceController.broadcast("Script reset")
     end
@@ -229,7 +233,14 @@ hooks.register("Tick", "interval", function()
                 if racerData.lap > RaceController.cfg.laps then
                     local overall = RaceController.secondsToClock(os.clock() - RaceController.startTime)
                     local fastest = RaceController.secondsToClock(racerData.fastestLap)
+                    RaceController.racerCount = RaceController.racerCount - 1
                     RaceController.broadcast(racer:getName() .. " has finished with an overall time of " .. overall .. " and a fastest lap of " .. fastest)
+
+                    if RaceController.racerCount == 0 then
+                        RaceController.broadcast("Race finished!")
+                        RaceController.running = 0
+                        RaceController.racers = {}
+                    end
                 end
             end
         elseif os.clock() - lastNilVehicleWarn > 10 then
