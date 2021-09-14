@@ -20,7 +20,7 @@ Any instructions with ALLCAPS text means you replace the ALLCAPS with your own v
 - Type `/cfg laps NUMBERHERE` to define how many laps you want - set it to 1 lap if it's not a circuit
 - Type `/add NAMEHERE` to add entrants to the race
 - Type `/start` to begin the 5 second countdown in chat - when it says GO, start racing!
-- Type `/reset` if you want to end the current race and start a new one - do this after every race
+- Type `/reset` if you want to cancel the current race
 
 ## List of all commands
 ### Console
@@ -40,4 +40,4 @@ Any instructions with ALLCAPS text means you replace the ALLCAPS with your own v
 - `/cfg CONFIGOPTION` - Displays the current value of a configuration option - you can view `laps`, `minLapTime`, and `finishLineWidth`
 - `/cfg CONFIGOPTION NEWVALUE` - Sets the value of a configuration option - you can change `laps`, `minLapTime`, and `finishLineWidth`
 - `/start` - Starts the race with a 5 second countdown
-- `/reset` - Resets the script, ending the current race - do this after every race
+- `/reset` - Resets the script, ending the current race
