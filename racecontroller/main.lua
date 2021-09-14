@@ -21,7 +21,7 @@ hooks.register("OnStdIn", "consoleControl", function(input)
         RaceController.writeCfg()
     end
 
-    if cmd[1] == "/promote" and cmd[2] then
+    if cmd[1] == "/rcpromote" and cmd[2] then
         local ply = RaceController.findPlayerByName(cmd[2])
 
         if ply then
@@ -36,7 +36,7 @@ hooks.register("OnStdIn", "consoleControl", function(input)
         end
     end
 
-    if cmd[1] == "/demote" and cmd[2] then
+    if cmd[1] == "/rcdemote" and cmd[2] then
         local ply = RaceController.findPlayerByName(cmd[2])
 
         if ply then
