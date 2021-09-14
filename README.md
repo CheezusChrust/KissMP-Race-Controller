@@ -8,7 +8,7 @@ Any instructions with ALLCAPS text means you replace the ALLCAPS with your own v
 - Start your server
 
 ## Instructions to set up
-- Join your server, and give yourself race controller admin by typing `/promote YOURNAMEHERE` in the server console
+- Join your server, and give yourself race controller admin by typing `/rcpromote YOURNAMEHERE` in the server console
 - Use `/writecfg` in either in-game chat or in the console to save your admin status
 - In-game, you need to define where your finish line is. To do this:
   - Get in a vehicle, preferrably something small
@@ -26,8 +26,8 @@ Any instructions with ALLCAPS text means you replace the ALLCAPS with your own v
 ### Console
 - `/reloadcfg` - Reloads the configuration from the saved config file
 - `/writecfg` - Writes the currently loaded configuration to a file
-- `/promote NAMEHERE` - Promotes a user to admin
-- `/demote NAMEHERE` - Demotes a user from admin
+- `/rcpromote NAMEHERE` - Promotes a user to admin
+- `/rcdemote NAMEHERE` - Demotes a user from admin
 
 ### In-game chat
 - `/add NAMEHERE` - Adds an entrant to the race
