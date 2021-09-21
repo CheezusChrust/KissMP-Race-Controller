@@ -143,6 +143,10 @@ function RaceController.findPlayerByName(name)
     end
 end
 
+function RaceController.playerHasValidVehicle(ply)
+    return vehicles[ply:getCurrentVehicle()] ~= nil
+end
+
 function RaceController.tableEmpty(tbl)
     return next(tbl) == nil
 end

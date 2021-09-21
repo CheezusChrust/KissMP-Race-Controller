@@ -59,15 +59,11 @@ hooks.register("OnChat", "chatControl", function(clientID, message)
     local caller = connections[clientID]
     local callerPos
 
-    --Required due to bug
+    --pcall required due to bug
     --https://github.com/TheHellBox/KISS-multiplayer/issues/104
-    if not pcall(function()
+    pcall(function()
         callerPos = vehicles[caller:getCurrentVehicle()]:getTransform():getPosition()
-    end) then
-        RaceController.msg(caller, "WARNING: Your vehicle object is nil! Spawn a new vehicle before running any commands!")
-
-        return ""
-    end
+    end)
 
     if cmd[1] == "/add" then
         local ply = RaceController.findPlayerByName(cmd[2])
@@ -76,7 +72,7 @@ hooks.register("OnChat", "chatControl", function(clientID, message)
             RaceController.msg(caller, "Player not found")
         elseif RaceController.racers[ply:getID()] then
             RaceController.msg(caller, "Player " .. ply:getName() .. " already added")
-        elseif not vehicles[ply:getCurrentVehicle()] then
+        elseif not RaceController.playerHasValidVehicle(ply) then
             RaceController.msg(caller, "WARNING: Player " .. ply:getName() .. " has nil vehicle!")
         else
             RaceController.addRacer(ply:getID())
@@ -117,6 +113,12 @@ hooks.register("OnChat", "chatControl", function(clientID, message)
     end
 
     if cmd[1] == "/p1" then
+        if not RaceController.playerHasValidVehicle(caller) then
+            RaceController.msg(caller, "WARNING: Your vehicle is nil! Remove and respawn your current vehicle to fix")
+
+            return ""
+        end
+
         if not RaceController.cfg.linePositions[RaceController.currentMap] then
             RaceController.cfg.linePositions[RaceController.currentMap] = {}
         end
@@ -127,6 +129,12 @@ hooks.register("OnChat", "chatControl", function(clientID, message)
     end
 
     if cmd[1] == "/p2" then
+        if not RaceController.playerHasValidVehicle(caller) then
+            RaceController.msg(caller, "WARNING: Your vehicle is nil! Remove and respawn your current vehicle to fix")
+
+            return ""
+        end
+
         if not RaceController.cfg.linePositions[RaceController.currentMap] then
             RaceController.cfg.linePositions[RaceController.currentMap] = {}
         end
@@ -209,7 +217,7 @@ hooks.register("Tick", "interval", function()
     if not RaceController.running then return end
 
     for racerID, racerData in pairs(RaceController.racers) do
-        if vehicles[connections[racerID]:getCurrentVehicle()] then
+        if RaceController.playerHasValidVehicle(connections[racerID]) then
             local racer = connections[racerID]
             local vehiclePos = vehicles[racer:getCurrentVehicle()]:getTransform():getPosition()
             local linePos = RaceController.cfg.linePositions[RaceController.currentMap]
